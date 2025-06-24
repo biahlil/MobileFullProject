@@ -1,1 +1,74 @@
+# Built application files
+*.apk
+*.aab
+*.ap_
+
+# Files for the Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Build directory
 /build
+/app/build
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Android Studio Navigation editor files
+.navigation/
+
+# Android Studio captures folder
+captures/
+
+# Android Studio Profiler data files
+*.hprof
+*.snapshot
+
+# IntelliJ IDEA project files
+.idea/
+*.iml
+*.ipr
+*.iws
+workspace.xml
+
+# Gradle files
+.gradle/
+build/
+
+# Caches
+*.lock
+*.log
+
+# Keystore files (NEVER commit your keystore files)
+*.jks
+*.keystore
+
+# Google Services file (often contains sensitive information, though sometimes committed if non-sensitive)
+# Jika google-services.json Anda tidak berisi informasi sensitif, Anda dapat menghapus baris di bawah ini.
+# Namun, praktik terbaiknya adalah TIDAK memasukkannya ke version control dan menyediakannya secara terpisah jika diperlukan.
+google-services.json
+# google-services.json
+
+# Local Gradle properties (sensitive information like API keys can be stored here)
+gradle.properties
+
+# Generated files for Fabric.io / Crashlytics
+com_crashlytics_export_strings.xml
+
+# Kapt (Kotlin Annotation Processing Tool) cache
+app/build/tmp/kapt3
+
+# Jetpack Compose specific
+app/build/generated/source/kapt/
+app/build/generated/source/kaptKotlin/
+
+# Secrets Gradle Plugin (jika digunakan)
+# https://github.com/google/secrets-gradle-plugin
+**/local.properties
+
+# Editor-specific files
+.vscode/
+*.DS_Store
+Thumbs.db
