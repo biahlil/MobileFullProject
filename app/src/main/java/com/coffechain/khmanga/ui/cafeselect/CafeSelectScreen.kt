@@ -25,14 +25,13 @@ fun CafeSelectScreen() {
     Scaffold(
         topBar = {
             CafeTopBar(
-                titleText = "Jakarta",
-                onNavigationClick = { /*TODO(nav back)*/ }
+                backOnClick = {  }
             )
         },
         bottomBar = {
             CafeBottomNavBar(
                 selectedIndex = 0,
-                onItemSelected = { /*TODO(switch tab)*/ },
+                onItemSelected = {  },
             )
         }
     ) { innerPadding ->

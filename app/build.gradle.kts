@@ -3,10 +3,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt.android.gradle)
     alias(libs.plugins.kotlin.serialization)
-    id("com.google.gms.google-services")
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -19,7 +19,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
+        multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,10 +37,17 @@ android {
             versionNameSuffix = "-debug"
         }
     }
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_1_8 // Gunakan Java 8 untuk kompatibilitas lebih luas
+//        targetCompatibility = JavaVersion.VERSION_1_8 // Gunakan Java 8 untuk kompatibilitas lebih luas
+//    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+//    kotlinOptions {
+//        jvmTarget = "1.8" // Gunakan Java 8 untuk kompatibilitas lebih luas
+//    }
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -48,41 +55,40 @@ android {
         compose = true
         buildConfig = true
     }
-    kapt {
-        correctErrorTypes = true
-    }
 }
 
 dependencies {
 
-    // Import the Firebase BoM
+//     Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    implementation (libs.gson)
+
+
+
+//     When using the BoM, don't specify versions in Firebase dependencies
     implementation(platform(libs.firebase.bom))
-
-
-    // TODO: Add the dependencies for Firebase products you want to use
-    // When using the BoM, don't specify versions in Firebase dependencies
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.ui.auth)
+
+//     Google Services
     implementation(libs.play.services.auth)
 
-
-
-    // Add the dependencies for any other desired Firebase products
-    // https://firebase.google.com/docs/android/setup#available-libraries
-
-    // Hilt
+//     Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
-    // Timber
+//     Timber
     implementation(libs.timber)
 
-    // ViewModel
+//     ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    // Ktor
+//     Ktor
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.content.negotiation)
@@ -90,9 +96,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.logging)
 
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
-    implementation(libs.coil.kt.coil.compose)
+//    AndroidX & Compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -101,6 +105,13 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.multidex)
+
+//    Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.kt.coil.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

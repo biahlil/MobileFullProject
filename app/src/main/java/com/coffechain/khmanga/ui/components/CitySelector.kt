@@ -2,6 +2,7 @@ package com.coffechain.khmanga.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,16 +20,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.coffechain.khmanga.R
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.coffechain.khmanga.ui.theme.KōhīMangaTheme
 
 
 @Composable
 fun CitySelectionSection() {
     Column {
-        Text("Select Your City", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(
+            "Pilih Kota",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+        )
         Spacer(modifier = Modifier.height(8.dp))
 
         val citys = listOf(
@@ -51,17 +59,29 @@ fun CitySelectionSection() {
 
 @Composable
 fun CitySelector(cityName: String, imageUrl: Int) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(end = 16.dp)) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(start = 16.dp)
+    ) {
         Image(
             painter = painterResource(imageUrl),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
+                .clickable(onClick = {})
                 .size(72.dp)
-                .clip(CircleShape) // circle
+                .clip(CircleShape)
                 .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
-        Text(cityName, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+        Text(cityName, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+    }
+}
+
+@Preview
+@Composable
+private fun CitySelectionSectionPreview() {
+    KōhīMangaTheme {
+        CitySelectionSection()
     }
 }
 

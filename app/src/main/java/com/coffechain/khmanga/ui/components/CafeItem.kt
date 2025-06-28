@@ -4,7 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,16 +23,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import com.coffechain.khmanga.ui.theme.KōhīMangaTheme
+import com.coffechain.khmanga.R
 
 
 @Composable
 fun CafeItem(
+    modifier: Modifier = Modifier,
     name: String,
     imageUrl: Int,
     address: String,
@@ -43,36 +47,71 @@ fun CafeItem(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
+        modifier = modifier
+            .width(350.dp)
+            .height(250.dp)
     ) {
-        Row(modifier = Modifier.padding(vertical = 8.dp)) {
-            //Image
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+        ) {
             Image(
                 painter = painterResource(imageUrl),
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(80.dp).padding(end = 16.dp).clip(RoundedCornerShape(8.dp))
+                contentScale = ContentScale.FillHeight,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .clip(RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp))
             )
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(address, fontSize = 14.sp, color = Color.Gray)
-                Text(description, fontSize = 12.sp, color = Color.Gray)
+                Text(name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(12.dp))
+                Column{
+                    Text(
+                        address,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 2
+                        )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 6
+                        )
+                }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     repeat(ratingStars) {
                         Icon(Icons.Default.Star, contentDescription = null, tint =
                             MaterialTheme.colorScheme.secondary, modifier = Modifier.size(16.dp))
                     }
-                }
-                Spacer(Modifier.width(8.dp))
-                IconButton(onClick = bookmarkButtonClick) {
-                    Icon(Icons.Default.FavoriteBorder, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    IconButton(onClick = bookmarkButtonClick) {
+                        Icon(Icons.Default.FavoriteBorder, contentDescription = null)
+                    }
                 }
 
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun CafeItemPreview() {
+    KōhīMangaTheme {
+        CafeItem(
+            name = "Cafe Name",
+            imageUrl = R.drawable.jakarta,
+            address = "Jl. Surabaya no.21 - Map",
+            description = "Suporting Text lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+            ratingStars = 5,
+            bookmarkButtonClick = {  },
+        )
     }
 }

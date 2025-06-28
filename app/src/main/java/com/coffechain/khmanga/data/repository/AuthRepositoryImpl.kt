@@ -1,9 +1,10 @@
 package com.coffechain.khmanga.data.repository
 
+import android.content.Context
 import com.coffechain.khmanga.domain.repo.AuthRepository
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,46 +13,18 @@ import javax.inject.Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth
 ) : AuthRepository {
+
+//     Mengambil pengguna yang sedang aktif dari Firebase.
+//     Mengembalikan null jika tidak ada yang login.
     override fun getCurrentUser(): FirebaseUser? {
-        TODO("Not yet implemented")
+        return auth.currentUser
     }
 
-    override suspend fun signInWithEmailPassword(
-        email: String,
-        pass: String
-    ): Result<FirebaseUser> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun signUpWithEmailPassword(
-        email: String,
-        pass: String
-    ): Result<FirebaseUser> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun logout() {
-        TODO("Not yet implemented")
-    }
-
-    // ... implementasi fungsi lain (getCurrentUser, signInWithEmailPassword, dll.) ...
-
-    override suspend fun signInWithGoogle(idToken: String): Result<FirebaseUser> {
+//    Logout dengan firebase ui
+    override suspend fun logout(context: Context): Result<Unit> {
         return try {
-            // Buat kredensial dari idToken
-            val credential = GoogleAuthProvider.getCredential(idToken, null)
-            // Lakukan sign in ke Firebase dengan kredensial tersebut
-            val authResult = auth.signInWithCredential(credential).await()
-            Result.success(authResult.user!!)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun signInAnonymously(): Result<FirebaseUser> {
-        return try {
-            val authResult = auth.signInAnonymously().await()
-            Result.success(authResult.user!!)
+            val logoutResult = AuthUI.getInstance().signOut(context).await()
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
