@@ -14,13 +14,10 @@ class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth
 ) : AuthRepository {
 
-//     Mengambil pengguna yang sedang aktif dari Firebase.
-//     Mengembalikan null jika tidak ada yang login.
     override fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
     }
 
-//    Logout dengan firebase ui
     override suspend fun logout(context: Context): Result<Unit> {
         return try {
             val logoutResult = AuthUI.getInstance().signOut(context).await()

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,7 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import com.coffechain.khmanga.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,9 +68,9 @@ fun CafeTopBar(
         },
         actions = {
             // e.g. profile icon, search, etc.
-            IconButton(onClick = { profileOnClicked }) {
+            IconButton(onClick = profileOnClicked) {
                 AsyncImage(
-                    model = profileUrl,
+                    model = profileUrl ?: R.drawable.defaultprofilepic,
                     contentDescription = "Profile",
                     modifier = Modifier
                         .fillMaxSize()
@@ -79,12 +78,8 @@ fun CafeTopBar(
                         .clip(CircleShape) // circle
                         .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
                 )
-                Icon(Icons.Filled.Person, contentDescription = "Profile")
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
     )
 }
 
@@ -94,7 +89,7 @@ private fun PreviewTopBar() {
     KōhīMangaTheme {
         Scaffold(
             topBar = {
-                CafeTopBar(profileUrl = "Jojo", backOnClick = {}, searchOnClicked = {}, profileOnClicked = {},)
+                CafeTopBar(profileUrl = "Jojo", backOnClick = {}, searchOnClicked = {}, profileOnClicked = {})
                      },
         ) { padding ->
             Surface(

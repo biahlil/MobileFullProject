@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.coffechain.khmanga.data.local.AppDatabase
 import com.coffechain.khmanga.data.local.dao.CafeDao
+import com.coffechain.khmanga.data.local.dao.MangaDao
 import com.coffechain.khmanga.data.local.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -36,5 +37,11 @@ object DatabaseModule {
     @Singleton
     fun provideUserDao(database: AppDatabase): UserDao {
         return database.userDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMangaDao(database: AppDatabase): MangaDao {
+        return database.mangaDao()
     }
 }

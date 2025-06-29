@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -74,5 +75,30 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun clearLocalUser() {
         userDao.clearAll()
+    }
+
+    override suspend fun updateUserPhotoUrl(userId: String, newPhotoUrl: String): Result<Unit> {
+        return try {
+            // Langkah 1: Perbarui field 'photoUrl' di dokumen Firestore
+            db.collection("users").document(userId)
+                .update("photoUrl", newPhotoUrl)
+                .await()
+            Timber.tag("UserRepository")
+                .d("Firestore: URL foto profil untuk user $userId berhasil diperbarui.")
+
+            val currentUserEntity = userDao.getUserById(userId) // Anda perlu fungsi ini di DAO
+            if (currentUserEntity != null) {
+                val updatedUserEntity = currentUserEntity.copy(photoUrl = newPhotoUrl)
+                userDao.insertOrUpdateUser(updatedUserEntity)
+                Timber.tag("UserRepository")
+                    .d("Room: URL foto profil untuk user $userId berhasil diperbarui.")
+            }
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Timber.tag("UserRepository")
+                .e(e, "Gagal memperbarui URL foto profil untuk user $userId.")
+            Result.failure(e)
+        }
     }
 }

@@ -11,4 +11,6 @@ interface CafeRepository {
     suspend fun getMangaCollection(cafeId: String): Result<List<Manga>>
     suspend fun getFoodMenu(cafeId: String): Result<List<Food>>
     suspend fun getReviews(cafeId: String): Result<List<Review>>
+    suspend fun seedDatabase(): Result<Unit>
+
 }

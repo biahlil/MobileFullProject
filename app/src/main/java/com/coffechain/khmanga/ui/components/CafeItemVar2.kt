@@ -1,6 +1,6 @@
 package com.coffechain.khmanga.ui.components
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -24,25 +26,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.coffechain.khmanga.R
+import com.coffechain.khmanga.domain.model.Cafe
 import com.coffechain.khmanga.ui.theme.KōhīMangaTheme
 
 
 @Composable
 fun CafeItemVar2(
     modifier: Modifier = Modifier,
-    name: String,
-    imageUrl: Int,
-    address: String,
-    description: String,
-    ratingStars: Int,
-    bookmarkButtonClick: () -> Unit = {}
+    cafe: Cafe,
+    onItemClick: (String) -> Unit,
+    onBookmarkClick: () -> Unit = {}
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -51,14 +51,15 @@ fun CafeItemVar2(
         modifier = modifier
             .width(350.dp)
             .height(250.dp)
+            .clickable(onClick = { onItemClick(cafe.id) })
     ) {
         Column(
             modifier = Modifier
                 .padding(12.dp)
         ) {
-            Image(
-                painter = painterResource(imageUrl),
-                contentDescription = null,
+            AsyncImage(
+                model  = cafe.imageUrl ?: R.drawable.jakarta,
+                contentDescription = cafe.name,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -76,7 +77,7 @@ fun CafeItemVar2(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        name,
+                        text = cafe.name,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         overflow = TextOverflow.Ellipsis,
@@ -85,15 +86,40 @@ fun CafeItemVar2(
                     )
                     Spacer(modifier = modifier.width(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        repeat(ratingStars) {
+                        val fullStars = cafe.averageRating.toInt()
+                        val halfStar = cafe.averageRating - fullStars >= 0.5
+                        val emptyStars = 5 - fullStars - if (halfStar) 1 else 0
+
+                        repeat(fullStars) {
                             Icon(
-                                Icons.Default.Star,
+                                Icons.Filled.Star,
                                 contentDescription = null,
-                                tint =
-                                    MaterialTheme.colorScheme.secondary,
+                                tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
+                        if (halfStar) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.StarHalf,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                        repeat(emptyStars) {
+                            Icon(
+                                Icons.Outlined.StarOutline,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "%.1f".format(cafe.averageRating),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
                 Row(
@@ -106,14 +132,14 @@ fun CafeItemVar2(
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(
-                            text = address,
+                            text = cafe.address,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1
                         )
                         Text(
-                            description,
+                            text = cafe.description,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             overflow = TextOverflow.Ellipsis,
@@ -121,7 +147,7 @@ fun CafeItemVar2(
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(onClick = bookmarkButtonClick) {
+                    IconButton(onClick = onBookmarkClick) {
                         Icon(Icons.Default.FavoriteBorder, contentDescription = null)
                     }
                 }
@@ -133,15 +159,22 @@ fun CafeItemVar2(
 @Preview
 @Composable
 private fun CafeItemVar2Preview() {
+    val cafe = Cafe(
+        id = "1",
+        imageUrl = null,
+        name = "MangaCafe1",
+        description = "Suporting Indonesia lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ",
+        address = "Jl. Ahmad Yani no.45 - Map",
+        averageRating = 4.83,
+        amenities = listOf("kursi", "meja", "toilet"),
+        location = "jakarta",
+        booths = listOf()
+    )
     KōhīMangaTheme {
         CafeItemVar2(
-            name = "Cafe Name",
-            imageUrl = R.drawable.jakarta,
-            address = "Jl. Surabaya no.21 - Map",
-            description = "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-            ratingStars = 4,
-            bookmarkButtonClick = {  },
-            modifier = Modifier
+            cafe = cafe,
+            onItemClick = { },
+            onBookmarkClick = { },
         )
     }
 }

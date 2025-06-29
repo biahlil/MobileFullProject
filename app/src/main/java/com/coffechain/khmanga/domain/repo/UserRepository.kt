@@ -8,4 +8,6 @@ interface UserRepository {
     suspend fun clearLocalUser()
     suspend fun createUserProfile(user: User): Result<Unit>
     fun observeUserProfile(): Flow<User?>
+    suspend fun updateUserPhotoUrl(userId: String, newPhotoUrl: String): Result<Unit>
+
 }

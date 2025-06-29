@@ -2,6 +2,7 @@ package com.coffechain.khmanga.domain.model
 
 data class Cafe(
     val id: String,
+    val imageUrl: String?,
     val name: String,
     val description: String,
     val address: String,

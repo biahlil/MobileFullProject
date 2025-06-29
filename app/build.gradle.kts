@@ -65,7 +65,9 @@ dependencies {
     ksp(libs.room.compiler)
     implementation (libs.gson)
 
-
+//     Navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
 //     When using the BoM, don't specify versions in Firebase dependencies
     implementation(platform(libs.firebase.bom))
@@ -106,11 +108,15 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.multidex)
+    implementation(libs.androidx.material.icons.extended)
 
 //    Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.kt.coil.compose)
+
+//    Cloudinary
+    implementation(libs.cloudinary.android)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
