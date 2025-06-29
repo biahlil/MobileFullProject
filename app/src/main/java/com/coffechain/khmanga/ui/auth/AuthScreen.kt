@@ -88,7 +88,7 @@ private fun launchSignInFlow(launcher: ActivityResultLauncher<Intent>) {
     val signInIntent = AuthUI.getInstance()
         .createSignInIntentBuilder()
         .setAvailableProviders(providers)
-        .setLogo(R.drawable.ic_launcher_foreground)
+        .setLogo(R.drawable.app_logo)
         .setTheme(R.style.Theme_KōhīManga)
         .setIsSmartLockEnabled(false, true)
         .build()

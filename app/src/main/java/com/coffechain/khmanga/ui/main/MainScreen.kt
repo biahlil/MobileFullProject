@@ -8,22 +8,26 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.coffechain.khmanga.NavRoutes
 import com.coffechain.khmanga.NavRoutes.BottomNavItem
 import com.coffechain.khmanga.ui.cafeselect.CafeSelectScreen
 import com.coffechain.khmanga.ui.cafeselect.CafeSelectViewModel
 import com.coffechain.khmanga.ui.components.CafeBottomNavBar
 import com.coffechain.khmanga.ui.components.CafeTopBar
+import com.coffechain.khmanga.ui.detail.CafeDetailScreen
 import com.coffechain.khmanga.ui.profile.ProfileScreen
 import com.coffechain.khmanga.ui.search.SearchScreen
 
@@ -63,6 +67,7 @@ fun MainScreen(
 
     Scaffold(
         topBar = {
+            if (currentRoute != NavRoutes.Search.route) {
                 CafeTopBar(
                     profileUrl = if (userProfileState is UserProfileState.Success) {
                         (userProfileState as UserProfileState.Success).photoUrl
@@ -70,9 +75,12 @@ fun MainScreen(
                     profileOnClicked = {
                         innerNavController.navigate("profile_screen")
                     },
-                    searchOnClicked = {},
+                    searchOnClicked = {
+                        innerNavController.navigate(NavRoutes.Search.route)
+                    },
                     backOnClick = {innerNavController.popBackStack()}
                 )
+            }
                  },
         bottomBar = {
             CafeBottomNavBar(
@@ -99,11 +107,15 @@ fun MainScreen(
                 val uiState by cafeViewModel.uiState.collectAsState()
                 CafeSelectScreen(
                     uiState = uiState,
-                    onRefresh = { cafeViewModel.fetchCafeData() }
+                    onRefresh = { innerNavController.navigate(NavRoutes.Home.route) },
+                    onItemClick = { cafeId ->
+                        innerNavController.navigate(NavRoutes.CafeDetail.createRoute(cafeId = cafeId))
+                    },
+                    onBookmarkClick = { /*cafeViewModel.toggleBookmark(it)*/ }
                 )
             }
             composable(NavRoutes.Transactions.route) {
-                // Text("Transaction Screen")
+                 Text("Transaction Screen")
             }
             composable(NavRoutes.Search.route) {
                 SearchScreen()
@@ -113,6 +125,14 @@ fun MainScreen(
                     onNavigateToAuth = onLogout
                 )
             }
+            composable(
+                route = NavRoutes.CafeDetail.route,
+                arguments = listOf(navArgument("cafeId") { type = NavType.StringType })
+            ) {
+                CafeDetailScreen(
+                )
+            }
+
         }
     }
 }

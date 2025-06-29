@@ -27,8 +27,8 @@ class SearchRepositoryImpl @Inject constructor(
                 val mangaEntities = mangaDeferred.await()
                 val cafes = cafeEntities.map { it.toDomainModel() }
                 val manga = mangaEntities.map { it.toDomainModel() }
-                Timber.tag("SearchRepository").d("Cafes: $cafes")
-                Timber.tag("SearchRepository").d("Mangas: $manga")
+                Timber.tag("DebugCafeDao").d("Cafes: $cafes")
+                Timber.tag("DebugCafeDao").d("Mangas: $manga")
                 Result.success(
                     SearchResult(
                         cafes = cafes,

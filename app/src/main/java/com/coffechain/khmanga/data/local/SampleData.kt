@@ -14,6 +14,20 @@ object SampleData {
         val booths: List<Booth>
     )
 
+    data class NewManga(
+        val title: String,
+        val genres: List<String>,
+        val imageUrl: String
+    )
+
+    data class NewFood(
+        val title: String,
+        val price: Double,
+        val category: String,
+        val imageUrl: String,
+        val description: String
+    )
+
     val sampleCafes = listOf(
         NewCafe(
             name = "Kōhī Manga Haven",
@@ -74,21 +88,20 @@ object SampleData {
     )
 
     val sampleManga = listOf(
-        mapOf("title" to "One Piece", "genres" to listOf("Adventure", "Action", "Fantasy")),
-        mapOf("title" to "Jujutsu Kaisen", "genres" to listOf("Dark Fantasy", "Supernatural")),
-        mapOf("title" to "Spy x Family", "genres" to listOf("Comedy", "Action", "Espionage")),
-        mapOf("title" to "Attack on Titan", "genres" to listOf("Action", "Dark Fantasy", "Post-apocalyptic")),
-        mapOf("title" to "Chainsaw Man", "genres" to listOf("Action", "Horror", "Dark Comedy"))
+        NewManga(title = "One Piece", genres = listOf("Adventure", "Action", "Fantasy"), imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232627/onepice_uqwf0r.jpg"),
+        NewManga(title = "Jujutsu Kaisen", genres = listOf("Dark Fantasy", "Supernatural"), imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232560/jjk_cg8iok.jpg"),
+        NewManga(title = "Spy x Family", genres = listOf("Comedy", "Action", "Espionage"), imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232628/spy_omuden.jpg"),
+        NewManga(title = "Attack on Titan", genres = listOf("Action", "Dark Fantasy"), imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232559/aot_vjxe3l.jpg"),
+        NewManga(title = "Chainsaw Man", genres = listOf("Action", "Horror", "Dark Comedy"), imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232589/cman_fql1vj.jpg")
     )
 
     val sampleFoods = listOf(
-        mapOf("title" to "Kopi Hitam Americano", "price" to 18000.0, "category" to "Minuman"),
-        mapOf("title" to "Matcha Latte", "price" to 25000.0, "category" to "Minuman"),
-        mapOf("title" to "Roti Bakar Cokelat Keju", "price" to 22000.0, "category" to "Makanan"),
-        mapOf("title" to "Nasi Goreng Spesial", "price" to 35000.0, "category" to "Makanan"),
-        mapOf("title" to "Kentang Goreng", "price" to 15000.0, "category" to "Cemilan")
+        NewFood(title = "Kopi Hitam Americano", price = 18000.0, category = "Minuman", description = "Espresso dengan tambahan air panas.", imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232997/Kopi_Hitam_Americano_b0jjw5.jpg"),
+        NewFood(title = "Matcha Latte", price = 25000.0, category = "Minuman", description = "Teh hijau Jepang dengan susu segar.", imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232996/Matcha_Latte_ipeurz.jpg"),
+        NewFood(title = "Roti Bakar Cokelat Keju", price = 22000.0, category = "Makanan", description = "Roti tawar dengan topping melimpah.", imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232996/Matcha_Latte_ipeurz.jpg"),
+        NewFood(title = "Nasi Goreng Spesial", price = 35000.0, category = "Makanan", description = "Nasi goreng dengan telur, ayam, dan sosis.", imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751232996/Matcha_Latte_ipeurz.jpg"),
+        NewFood(title = "Kentang Goreng", price = 15000.0, category = "Cemilan", description = "Kentang goreng renyah dengan saus pilihan.", imageUrl = "https://res.cloudinary.com/ddim30d7v/image/upload/v1751233000/Kentang_Goreng_m6dzq1.jpg")
     )
-
     val sampleReviews = listOf(
         mapOf("userId" to "user_abc", "userName" to "Budi", "rating" to 5.0, "comment" to "Tempatnya juara! Wajib kembali lagi."),
         mapOf("userId" to "user_def", "userName" to "Citra", "rating" to 4.0, "comment" to "Koleksi manganya lengkap, tapi makanannya biasa saja."),

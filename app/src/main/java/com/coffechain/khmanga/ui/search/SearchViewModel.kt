@@ -33,7 +33,7 @@ class SearchViewModel @Inject constructor(
                 .collect { query ->
                     performSearch(query)
                 }
-            Timber.tag("SearchViewModel").d("SearchViewModel: $searchQuery")
+            Timber.tag("DebugCafeDao").d("SearchViewModel: $searchQuery")
         }
     }
 
@@ -49,10 +49,10 @@ class SearchViewModel @Inject constructor(
             _uiState.value = SearchUiState.Loading
             searchRepository.searchEverything(query)
                 .onSuccess { searchResult ->
-                    if (searchResult.cafes.isEmpty() || searchResult.manga.isEmpty()) {
-                        _uiState.value = SearchUiState.Empty
-                    } else {
+                    if (searchResult.cafes.isNotEmpty() || searchResult.manga.isNotEmpty()) {
                         _uiState.value = SearchUiState.Success(searchResult)
+                    } else {
+                        _uiState.value = SearchUiState.Empty
                     }
                 }
                 .onFailure { exception ->

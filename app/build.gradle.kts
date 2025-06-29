@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -75,6 +76,8 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.ui.auth)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.google.firebase.analytics)
 
 //     Google Services
     implementation(libs.play.services.auth)
@@ -82,6 +85,13 @@ dependencies {
 //     Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+//      Hilt Worker
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work.runtime.ktx)
+    // When using Kotlin.
+    ksp(libs.androidx.hilt.compiler)
+
 
 //     Timber
     implementation(libs.timber)

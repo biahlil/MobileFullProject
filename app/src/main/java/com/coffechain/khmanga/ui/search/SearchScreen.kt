@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,20 +50,14 @@ fun SearchScreen(
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+            Timber.tag("DebugCafeDao").d("UI State: $uiState")
             when (val state = uiState) {
                 is SearchUiState.Idle -> {
+                    Timber.tag("DebugCafeDao").d("State: $uiState")
                     Text("Mulai mencari...", modifier = Modifier.align(Alignment.Center))
                 }
-                is SearchUiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-                is SearchUiState.Empty -> {
-                    Text("Tidak ada hasil untuk \"$searchQuery\"", modifier = Modifier.align(Alignment.Center))
-                }
-                is SearchUiState.Error -> {
-                    Text("Error: ${state.message}", modifier = Modifier.align(Alignment.Center))
-                }
                 is SearchUiState.Success -> {
+                    Timber.tag("DebugCafeDao").d("State: $uiState")
                     LazyColumn(
                         contentPadding = PaddingValues(vertical = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -85,6 +80,18 @@ fun SearchScreen(
                             }
                         }
                     }
+                }
+                is SearchUiState.Loading -> {
+                    Timber.tag("DebugCafeDao").d("State: $uiState")
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+                is SearchUiState.Empty -> {
+                    Timber.tag("DebugCafeDao").d("State: $uiState")
+                    Text("Tidak ada hasil untuk \"$searchQuery\"", modifier = Modifier.align(Alignment.Center))
+                }
+                is SearchUiState.Error -> {
+                    Timber.tag("DebugCafeDao").d("State: $uiState")
+                    Text("Error: ${state.message}", modifier = Modifier.align(Alignment.Center))
                 }
             }
         }

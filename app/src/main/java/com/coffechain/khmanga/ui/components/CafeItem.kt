@@ -40,8 +40,8 @@ import com.coffechain.khmanga.domain.model.Cafe
 fun CafeItem(
     modifier: Modifier = Modifier,
     cafe: Cafe,
-    onItemClick: (String) -> Unit,
-    onBookmarkClick: () -> Unit = {}
+    onItemClick: (String) -> Unit ={},
+    onBookmarkClick: (String) -> Unit = {}
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -126,7 +126,7 @@ fun CafeItem(
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    IconButton(onClick = onBookmarkClick) {
+                    IconButton(onClick = { onBookmarkClick }) {
                         Icon(Icons.Default.FavoriteBorder, contentDescription = null)
                     }
                 }

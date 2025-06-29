@@ -5,6 +5,7 @@ coilComposeVersion = "2.4.0"
 firebaseBom = "33.1.1"
 gson = "2.11.0"
 coreKtx = "1.16.0"
+hiltCompiler = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -19,11 +20,14 @@ kotlinxSerialization = "1.8.1"
 firebaseAuth = "23.2.1"
 firebaseUi = "8.0.2"
 hilt = "2.52"
+hiltExt = "1.2.0"
 room = "2.6.1"
 navigationCompose = "2.9.0"
 hiltNavigationCompose = "1.2.0"
 materialIconsExtended = "1.7.8"
 cloudinary = "2.5.0"
+workManager = "2.10.2"
+firebaseCrashlyticsPlugin = "3.0.1"
 
 # Jangan Ubah ini
 playServicesAuth = "20.7.0"
@@ -49,6 +53,8 @@ coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 
 # Testing
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+google-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -60,6 +66,10 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
+
 
 # Navigation
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
@@ -109,4 +119,5 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 google-services = { id = "com.google.gms.google-services", version = "4.4.2" }
 hilt-android-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 

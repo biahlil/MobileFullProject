@@ -41,8 +41,8 @@ import com.coffechain.khmanga.ui.theme.KōhīMangaTheme
 fun CafeItemVar2(
     modifier: Modifier = Modifier,
     cafe: Cafe,
-    onItemClick: (String) -> Unit,
-    onBookmarkClick: () -> Unit = {}
+    onItemClick: (String) -> Unit ={},
+    onBookmarkClick: (String) -> Unit = {}
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -147,7 +147,7 @@ fun CafeItemVar2(
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(onClick = onBookmarkClick) {
+                    IconButton(onClick = { onBookmarkClick }) {
                         Icon(Icons.Default.FavoriteBorder, contentDescription = null)
                     }
                 }

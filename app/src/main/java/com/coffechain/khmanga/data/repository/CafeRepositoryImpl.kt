@@ -4,6 +4,10 @@ package com.coffechain.khmanga.data.repository
 
 import android.annotation.SuppressLint
 import com.coffechain.khmanga.data.local.SampleData
+import com.coffechain.khmanga.data.local.dao.CafeDao
+import com.coffechain.khmanga.data.local.toDomainModel
+import com.coffechain.khmanga.data.local.toEntity
+import com.coffechain.khmanga.data.network.CafeDto
 import com.coffechain.khmanga.domain.model.Booth
 import com.coffechain.khmanga.domain.model.Cafe
 import com.coffechain.khmanga.domain.model.Food
@@ -12,6 +16,8 @@ import com.coffechain.khmanga.domain.model.Review
 import com.coffechain.khmanga.domain.repo.CafeRepository
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,7 +26,8 @@ import kotlin.String
 
 @Singleton
 class CafeRepositoryImpl @Inject constructor(
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    private val cafeDao: CafeDao
 ) : CafeRepository {
 
     @SuppressLint("BinaryOperationInTimber")
@@ -38,7 +45,6 @@ class CafeRepositoryImpl @Inject constructor(
                         type = boothMap["type"] as? String ?: ""
                     )
                 } ?: emptyList()
-
                 Cafe(
                     id = doc.id,
                     imageUrl = doc.getString("imageUrl") ?: "",
@@ -51,6 +57,9 @@ class CafeRepositoryImpl @Inject constructor(
                     booths = boothsList
                 )
             }
+//            val cafeEntiys = cafes.map { it.toEntity() }
+//            cafeDao.insertAll(cafeEntiys)
+//            Timber.tag("DebugCafeDao").d("$cafeEntiys, Jumlah Cafe: ${cafeEntiys.size}")
             Timber.tag("CafeRepositoryImpl").d("$cafes, Jumlah Cafe: ${cafes.size}")
             Result.success(cafes)
         } catch (e: Exception) {
@@ -59,6 +68,22 @@ class CafeRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun observeAllCafes(): Flow<List<Cafe>> {
+        // Ambil data dari DAO, lalu map dari Entity ke Model Domain
+        return cafeDao.observeAllCafes().map { cafeEntities ->
+            cafeEntities.map { it.toDomainModel() }
+        }
+    }
+
+    override suspend fun getCafeDetails(cafeId: String): Result<Cafe> {
+        return try {
+            cafeDao.getCafeById(cafeId)?.let { cafeEntity ->
+                Result.success(cafeEntity.toDomainModel())
+                } ?: Result.failure(Exception("Cafe not found"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
     override suspend fun getMangaCollection(cafeId: String): Result<List<Manga>> {
         return try {
@@ -69,6 +94,7 @@ class CafeRepositoryImpl @Inject constructor(
                     id = doc.id,
                     title = doc.getString("title") ?: "",
                     genres = doc.get("genres") as? List<String> ?: emptyList(),
+                    imageUrl = doc.getString("imageUrl") ?: "",
                     availableVolumes = (doc.get("availableVolumes") as? List<Int>)?.map {
                         it.toInt()
                     } ?: emptyList()
@@ -91,6 +117,7 @@ class CafeRepositoryImpl @Inject constructor(
                     title = food.getString("title") ?: "",
                     description = food.get("description") as? String ?: "",
                     price = food.get("price") as? Double ?: 0.0,
+                    imageUrl = food.get("imageUrl") as? String ?: "",
                     category = food.get("category") as? String ?: "",
                     size = food.get("size") as? String ?: ""
                 )
@@ -130,7 +157,7 @@ class CafeRepositoryImpl @Inject constructor(
                 val mangaToSeed = SampleData.sampleManga
                 val foodsToSeed = SampleData.sampleFoods
                 val reviewsToSeed = SampleData.sampleReviews
-                Timber.d("Memulai proses seeding data lengkap dari SampleData...")
+                Timber.tag("CafeRepositoryImpl").d("Memulai proses seeding data lengkap dari SampleData...")
                 val batch = db.batch()
 
                 for (cafeData in cafesToSeed) {
@@ -182,13 +209,45 @@ class CafeRepositoryImpl @Inject constructor(
                 }
 
                 batch.commit().await()
-                Timber.i("Seeding data lengkap berhasil.")
+                Timber.tag("CafeRepositoryImpl").i("Seeding data lengkap berhasil.")
                 Result.success(Unit)
 
             } catch (e: Exception) {
-                Timber.e(e, "Gagal melakukan seeding data lengkap.")
+                Timber.tag("CafeRepositoryImpl").e(e, "Gagal melakukan seeding data lengkap.")
                 Result.failure(e)
             }
 
+    }
+
+    override suspend fun syncCafesFromFirestore(): Result<Unit> {
+        return try {
+            Timber.tag("DebugCafeDao").d("Memulai sinkronisasi data dari Firestore ke Room...")
+            val snapshot = db.collection("cafes").get().await()
+            val cafeEntities = snapshot.documents.mapNotNull { doc ->
+                val dto = doc.toObject(CafeDto::class.java)
+                dto?.toEntity(id = doc.id)
+            }
+            Timber.tag("DebugCafeDao").i("$cafeEntities cafe berhasil disinkronkan ke Room.")
+
+            if (cafeEntities.isNotEmpty()) {
+                cafeDao.insertAll(cafeEntities)
+                Timber.tag("DebugCafeDao").i("$cafeEntities cafe berhasil disinkronkan ke Room.")
+            } else {
+                Timber.tag("DebugCafeDao").w("Tidak ada data kafe di Firestore untuk disinkronkan.")
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Timber.e(e, "Sinkronisasi gagal.")
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun clearLocalCafes() {
+        if (cafeDao.getCafeCount() > 0) {
+            cafeDao.clearAll()
+            Timber.i("Tabel 'cafes' tidak kosong, cache lokal berhasil dibersihkan.")
+        } else {
+            Timber.i("Tabel 'cafes' sudah kosong, tidak ada aksi pembersihan.")
+        }
     }
 }

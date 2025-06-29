@@ -15,6 +15,15 @@ interface CafeDao {
     @Query("DELETE FROM cafes")
     suspend fun clearAll()
 
-    @Query("SELECT * FROM cafes WHERE name LIKE '%' || :query || '%'")
+    @Query("SELECT * FROM cafes WHERE LOWER(name) LIKE '%' || :query || '%'")
     suspend fun searchCafesByName(query: String): List<CafeEntity>
+
+    @Query("SELECT * FROM cafes ")
+    suspend fun getAllCafes(): List<CafeEntity>
+
+    @Query("SELECT * FROM cafes WHERE id = :cafeId")
+    suspend fun getCafeById(cafeId: String): CafeEntity?
+
+    @Query("SELECT COUNT(*) FROM cafes")
+    suspend fun getCafeCount(): Int
 }

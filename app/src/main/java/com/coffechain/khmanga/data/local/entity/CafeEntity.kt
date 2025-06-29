@@ -11,6 +11,7 @@ data class CafeEntity(
     val name: String,
     val description: String,
     val address: String,
+    val location: String,
     val averageRating: Double,
     val amenities: List<String>,
     val booths: List<Booth>

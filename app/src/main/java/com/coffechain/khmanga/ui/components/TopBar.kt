@@ -38,7 +38,7 @@ fun CafeTopBar(
     TopAppBar(
         title = {
             IconButton(
-                onClick = { searchOnClicked },
+                onClick = searchOnClicked,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp)
@@ -47,6 +47,7 @@ fun CafeTopBar(
                     value = "",
                     readOnly = true,
                     onValueChange = {  },
+                    enabled = false,
                     label = { Text("Search") },
                     textStyle = MaterialTheme.typography.bodyMedium,
                     leadingIcon = {

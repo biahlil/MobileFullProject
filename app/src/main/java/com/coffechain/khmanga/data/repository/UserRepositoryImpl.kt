@@ -79,7 +79,6 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun updateUserPhotoUrl(userId: String, newPhotoUrl: String): Result<Unit> {
         return try {
-            // Langkah 1: Perbarui field 'photoUrl' di dokumen Firestore
             db.collection("users").document(userId)
                 .update("photoUrl", newPhotoUrl)
                 .await()

@@ -13,15 +13,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.coffechain.khmanga.domain.model.Cafe
-import com.coffechain.khmanga.ui.theme.KōhīMangaTheme
 
 
 @Composable
 fun PopularCafesSection(
-    cafes: List<Cafe>
+    cafes: List<Cafe>,
+    onItemClick: (String) -> Unit,
+    onBookmarkClick: (String) -> Unit
 ) {
     Column {
         Text(
@@ -39,56 +39,10 @@ fun PopularCafesSection(
             items(items = cafes, key = { it.id }) { cafe ->
                 CafeItemVar2(
                     cafe = cafe,
-                    onItemClick = { /* TODO: Navigasi ke detail cafe */ },
-                    onBookmarkClick = { /* TODO: Logika bookmark */ }
+                    onItemClick = onItemClick,
+                    onBookmarkClick = onBookmarkClick
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun PopularCafesSectionPreview() {
-    val cafe1 = Cafe(
-        id = "1",
-        imageUrl = null,
-        name = "MangaCafe1",
-        description = "Suporting Indonesia lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ",
-        address = "Jl. Ahmad Yani no.45 - Map",
-        averageRating = 4.83,
-        amenities = listOf("kursi", "meja", "toilet"),
-        location = "jakarta",
-        booths = listOf()
-    )
-    val cafe2 = Cafe(
-        id = "1",
-        imageUrl = null,
-        name = "MangaCafe1",
-        description = "Suporting Indonesia lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ",
-        address = "Jl. Ahmad Yani no.45 - Map",
-        averageRating = 4.83,
-        amenities = listOf("kursi", "meja", "toilet"),
-        location = "jakarta",
-        booths = listOf()
-    )
-    val cafe3 = Cafe(
-        id = "1",
-        imageUrl = null,
-        name = "MangaCafe1",
-        description = "Suporting Indonesia lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ",
-        address = "Jl. Ahmad Yani no.45 - Map",
-        averageRating = 4.83,
-        amenities = listOf("kursi", "meja", "toilet"),
-        location = "jakarta",
-        booths = listOf()
-    )
-
-    val cafes = listOf(cafe1, cafe2, cafe3)
-
-    KōhīMangaTheme {
-        PopularCafesSection(
-            cafes = cafes,
-        )
     }
 }

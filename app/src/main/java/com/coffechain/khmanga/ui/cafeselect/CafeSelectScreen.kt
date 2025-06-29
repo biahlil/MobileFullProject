@@ -21,11 +21,12 @@ import com.coffechain.khmanga.ui.components.PopularCafesSection
 @Composable
 fun CafeSelectScreen(
     uiState: CafeSelectUiState,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onItemClick: (String) -> Unit,
+    onBookmarkClick: (String) -> Unit
 ) {
     when (uiState) {
         is CafeSelectUiState.Loading -> {
-            // Tampilkan loading indicator di tengah layar
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -34,7 +35,6 @@ fun CafeSelectScreen(
             }
         }
         is CafeSelectUiState.Error -> {
-            // Tampilkan pesan error dan tombol untuk mencoba lagi
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -49,66 +49,18 @@ fun CafeSelectScreen(
             }
         }
         is CafeSelectUiState.Success -> {
-            // Jika sukses, baru tampilkan konten utama
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-//                item {
-//                    CitySelectionSection
-//                }
                 item {
-                    PopularCafesSection(cafes = uiState.popularCafes)
+                    PopularCafesSection(cafes = uiState.popularCafes, onItemClick = onItemClick, onBookmarkClick = onBookmarkClick)
                 }
                 item {
-                    NearbyCafesSection(cafes = uiState.nearbyCafes)
+                    NearbyCafesSection(cafes = uiState.nearbyCafes, onItemClick = onItemClick, onBookmarkClick = onBookmarkClick)
                 }
             }
         }
     }
 }
-
-//@Preview
-//@Composable
-//private fun CafeSelectScreenPrev() {
-//    val cafe1 = Cafe(
-//        id = "1",
-//        imageUrl = null,
-//        name = "MangaCafe1",
-//        description = "Suporting Indonesia lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ",
-//        address = "Jl. Ahmad Yani no.45 - Map",
-//        averageRating = 4.83,
-//        amenities = listOf("kursi", "meja", "toilet"),
-//        location = "jakarta",
-//        booths = listOf()
-//    )
-//    val cafe2 = Cafe(
-//        id = "1",
-//        imageUrl = null,
-//        name = "MangaCafe1",
-//        description = "Suporting Indonesia lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ",
-//        address = "Jl. Ahmad Yani no.45 - Map",
-//        averageRating = 4.83,
-//        amenities = listOf("kursi", "meja", "toilet"),
-//        location = "jakarta",
-//        booths = listOf()
-//    )
-//    val cafe3 = Cafe(
-//        id = "1",
-//        imageUrl = null,
-//        name = "MangaCafe1",
-//        description = "Suporting Indonesia lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ",
-//        address = "Jl. Ahmad Yani no.45 - Map",
-//        averageRating = 4.83,
-//        amenities = listOf("kursi", "meja", "toilet"),
-//        location = "jakarta",
-//        booths = listOf()
-//    )
-//
-//    val cafes = listOf(cafe1, cafe2, cafe3)
-//
-//    KōhīMangaTheme{
-//        CafeSelectScreen(
-//    }
-//}
