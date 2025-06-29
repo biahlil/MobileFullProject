@@ -95,4 +95,5 @@ class ProfileViewModel @Inject constructor(
                 .onFailure { e -> Timber.e(e, "Database seeding lengkap gagal.") }
         }
     }
+
 }
