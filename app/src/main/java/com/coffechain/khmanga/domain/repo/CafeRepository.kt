@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface CafeRepository {
-    suspend fun getCafes(): Result<List<Cafe>>
     suspend fun getMangaCollection(cafeId: String): Result<List<Manga>>
     suspend fun getFoodMenu(cafeId: String): Result<List<Food>>
     suspend fun getReviews(cafeId: String): Result<List<Review>>

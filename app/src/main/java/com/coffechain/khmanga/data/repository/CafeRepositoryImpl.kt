@@ -30,46 +30,8 @@ class CafeRepositoryImpl @Inject constructor(
     private val cafeDao: CafeDao
 ) : CafeRepository {
 
-    @SuppressLint("BinaryOperationInTimber")
-    override suspend fun getCafes(): Result<List<Cafe>> {
-        return try {
-            val snapshot = db.collection("cafes").get().await()
-            val cafes = snapshot.documents.mapNotNull { doc ->
-                // Proses mapping dari data Firestore ke domain model
-                val boothsList = (doc.get("booths") as? List<Map<String, Any>>)?.map { boothMap ->
-                    Booth(
-                        id = boothMap["boothId"] as? String ?: "",
-                        name = boothMap["name"] as? String ?: "",
-                        price = boothMap["price"] as? Double ?: 0.0,
-                        capacity = (boothMap["capacity"] as? Long)?.toInt() ?: 0,
-                        type = boothMap["type"] as? String ?: ""
-                    )
-                } ?: emptyList()
-                Cafe(
-                    id = doc.id,
-                    imageUrl = doc.getString("imageUrl") ?: "",
-                    name = doc.getString("name") ?: "",
-                    description = doc.getString("description") ?: "",
-                    address = doc.getString("address") ?: "",
-                    location = doc.getString("location") ?: "",
-                    averageRating = doc.getDouble("averageRating") ?: 0.0,
-                    amenities = doc.get("amenities") as? List<String> ?: emptyList(),
-                    booths = boothsList
-                )
-            }
-//            val cafeEntiys = cafes.map { it.toEntity() }
-//            cafeDao.insertAll(cafeEntiys)
-//            Timber.tag("DebugCafeDao").d("$cafeEntiys, Jumlah Cafe: ${cafeEntiys.size}")
-            Timber.tag("CafeRepositoryImpl").d("$cafes, Jumlah Cafe: ${cafes.size}")
-            Result.success(cafes)
-        } catch (e: Exception) {
-            Timber.tag("CafeRepositoryImpl").e(e, "Failed to get cafes")
-            Result.failure(e)
-        }
-    }
-
     override fun observeAllCafes(): Flow<List<Cafe>> {
-        // Ambil data dari DAO, lalu map dari Entity ke Model Domain
+        // Ambil data dari DAO, dan map dari Entity ke Model Domain
         return cafeDao.observeAllCafes().map { cafeEntities ->
             cafeEntities.map { it.toDomainModel() }
         }
@@ -113,7 +75,7 @@ class CafeRepositoryImpl @Inject constructor(
             val snapshot = db.collection("cafes").document(cafeId).collection("foodMenu").get().await()
             val foodList = snapshot.documents.mapNotNull { food ->
                 Food(
-                    id = food.id, // Ambil id dari dokumen itu sendiri
+                    id = food.id,
                     title = food.getString("title") ?: "",
                     description = food.get("description") as? String ?: "",
                     price = food.get("price") as? Double ?: 0.0,
@@ -163,8 +125,6 @@ class CafeRepositoryImpl @Inject constructor(
                 for (cafeData in cafesToSeed) {
                     val cafeRef = db.collection("cafes").document()
 
-                    // --- PERBAIKAN LOGIKA ADA DI SINI ---
-                    // Ubah List<Booth> menjadi List<Map<String, Any>> sebelum disimpan
                     val boothsForFirestore = cafeData.booths.map { booth ->
                         mapOf(
                             "boothId" to booth.id,
