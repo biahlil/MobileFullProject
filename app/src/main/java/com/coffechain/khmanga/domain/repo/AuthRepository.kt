@@ -1,9 +1,20 @@
 package com.coffechain.khmanga.domain.repo
 
 import android.content.Context
-import com.google.firebase.auth.FirebaseUser
+import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.result.Credentials
+import com.auth0.android.result.UserProfile
 
-interface AuthRepository {
-    fun getCurrentUser(): FirebaseUser?
-    suspend fun logout(context: Context): Result<Unit>
+interface Auth0Repository {
+    fun login(
+        context: Context,
+        onSuccess: (Credentials) -> Unit,
+        onFailure: (AuthenticationException) -> Unit
+    )
+    fun logout(
+        context: Context,
+        onSuccess: () -> Unit,
+        onFailure: (AuthenticationException) -> Unit
+    )
+    suspend fun getUserProfile(accessToken: String): Result<UserProfile>
 }

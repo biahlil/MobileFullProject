@@ -21,7 +21,11 @@
             android:theme="@style/Theme.KōhīManga">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="@string/com_auth0_domain"
+                    android:scheme="https" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -1,6 +1,7 @@
 package com.coffechain.khmanga.di
 
 import android.content.Context
+import com.auth0.android.Auth0
 import com.coffechain.khmanga.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -43,5 +44,14 @@ object FirebaseModule {
     @Singleton
     fun provideFirebaseAuthInstance(): FirebaseAuth {
         return Firebase.auth
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuth0Account(@ApplicationContext context: Context): Auth0 {
+        return Auth0(
+            context.getString(R.string.com_auth0_client_id),
+            context.getString(R.string.com_auth0_domain)
+        )
     }
 }

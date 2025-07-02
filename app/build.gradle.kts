@@ -22,6 +22,7 @@ android {
         versionName = "1.0"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -52,6 +53,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -59,6 +61,8 @@ android {
 }
 
 dependencies {
+//    Auth0
+    implementation(libs.auth0)
 
 //     Room
     implementation(libs.room.runtime)
